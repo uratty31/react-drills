@@ -1,26 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
+import Todo from './Component/Todo';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      newTask: '',
+      list: ['sleeping', 'cleaning', 'exercising']
+    }
+    this.handleChange = this.handleChange.bind(this)
+  }
+
+  handleChange(value) {
+    this.setState({ newTask: value });
+  }
+
+  //add task will take things from newTask and add them to storeList. it wont do the thing
+  //need to create a input field allowing people to create new tasks (mostly done)
+  addTask = () => {
+    const newList = [this.state.newTask, ...this.state.list]
+    
+    this.setState({ list: newList, newTask: '' })
+  }
+
+  render() {
+
+    const listMapped = this.state.list.map((item, i) => {
+      return (
+        <Todo key={i} item={item} />
+      )
+    })
+
+    return (
+      <div className="App">
+        <input value={this.state.newTask} onChange={e => this.handleChange(e.target.value)} type='text' />
+        {listMapped}
+        <button onClick={this.addTask}>Add Task</button>
+      </div>
+    );
+  }
 }
-
-export default App;
